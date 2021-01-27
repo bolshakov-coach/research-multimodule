@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: ${app.name:params-holder}
+
+schedule:
+  delay: 15000
+
+values:
+  test: some test value
+  source:
+    application-file: it is value from application.properties
+    profile-file: this value will be overrided
+    multi-property-env-value: value in env value only for DEFAULT in additional file multi-property
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+values:
+  source:
+    multi-property-env-value: value in env value only for DEV in additional file multi-property
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+values:
+  source:
+    multi-property-env-value: value in env value only for PROD in additional file multi-property
+
+
+
