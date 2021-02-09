@@ -1,6 +1,7 @@
 package pro.bolshakov.paramsholder.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,6 +24,7 @@ public abstract class AbstractMyClass {
     }
 
     @Bean
+    @ConditionalOnProperty(value = "schedule.enable", havingValue = "true")
     public MyClassWithScheduled myClassWithScheduled(){
         return new MyClassWithScheduled();
     }

@@ -7,20 +7,19 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pro.bolshakov.paramsholder.config.MyClass;
 import pro.bolshakov.paramsholder.config.ParamHolder;
 import pro.bolshakov.paramsholder.config.ValuesProperties;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
 @RestController
-public class MainController {
+public class MainController implements IMainController {
 
     @Autowired
     private Environment env;
@@ -56,8 +55,7 @@ public class MainController {
         }
         return builder.toString();
     }
-
-    @GetMapping("/values")
+    @Override
     public String getValuesProperties(){
         return valuesProperties.toString();
     }
@@ -77,6 +75,36 @@ public class MainController {
         myClass.runAsyncMethod(UUID.randomUUID());
         return "Ok";
     }
+
+    @PutMapping("/test-delivery")
+    public String methodTestDelivery(HttpServletRequest request){
+        System.out.println("************ Got test delivery");
+        outputHeadersParameters(request);
+
+        return "OK";
+    }
+
+    private void outputHeadersParameters(HttpServletRequest request) {
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()){
+            String header = headerNames.nextElement();
+            System.out.println("Header " + header + " -> " + request.getHeader(header));
+        }
+
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()){
+            String parameter = parameterNames.nextElement();
+            System.out.println("Parameter " + parameter + " -> " + request.getParameter(parameter));
+        }
+    }
+
+    @PostMapping("/test-callback")
+    public String methodTestCallback(HttpServletRequest request){
+        System.out.println("************ Got Callback");
+        outputHeadersParameters(request);
+        return "OK";
+    }
+
 
     @PutMapping("/v1/external-services/change-lead-by-product-app")
     public ResponseEntity<String> testPkbIntegration(HttpServletRequest request){

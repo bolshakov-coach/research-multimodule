@@ -2,15 +2,25 @@ spring:
   application:
     name: ${app.name:params-holder}
 
+app:
+  name: ^artifactId^
+
+api:
+  path: ""
+
 schedule:
   delay: 15000
+  enable: true
 
 values:
-  test: some test value
+  test: some test value ${app.name}
   source:
     application-file: it is value from application.properties
     profile-file: this value will be overrided
     multi-property-env-value: value in env value only for DEFAULT in additional file multi-property
+logging:
+  level:
+    org.springframework.web: debug
 ---
 spring:
   config:
